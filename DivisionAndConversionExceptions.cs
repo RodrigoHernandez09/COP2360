@@ -7,13 +7,14 @@ class DivisionConversionExceptions {
 
 		Console.WriteLine("What is the second number?");
 		string second = Console.ReadLine();
-
+		//Trys to convert each string into a int then divide them
 		try {
 			int firstNumber = Convert.ToInt32(first);
 			int secondNumber = Convert.ToInt32(second);
 			int division = Divide(firstNumber,secondNumber);
 			Console.WriteLine("The result of " + firstNumber + " divided by " + secondNumber + " is: " + division);
 		}
+		//catches some common exceptions that might occur
 		catch(DivideByZeroException zero) {
 			Console.WriteLine("You can not divide by zero.");
 			Console.WriteLine("Error message: " + zero.Message);
@@ -30,6 +31,7 @@ class DivisionConversionExceptions {
 			Console.WriteLine("The number(s) entered was too big.");
 			Console.WriteLine("Error message: " + over.Message);
 		}
+		//catches any exception that was not previously accounted for
 		catch(Exception e) {
 			Console.WriteLine("Sorry an unexpected error has occured.");
 			Console.WriteLine("Error message: " + e.Message);
