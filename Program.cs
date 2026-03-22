@@ -1,0 +1,232 @@
+using System;
+
+class CollectionsProject
+{
+
+	public static Dictionary<string, float> keyValuePairs = new Dictionary<string, float>();
+	static void Main(string[] args)
+	{
+
+		Console.WriteLine("Choose from the following options:" +
+		                  "\n 1 : Populate the dictionary" +
+		                  "\n 2 : Display dictionary contents" +
+		                  "\n 3 : Remove a key from the dictionary" +
+		                  "\n 4 : Add a new key and value" +
+		                  "\n 5 : Add a value to an existing key" +
+		                  "\n 6 : Sort the keys in the dictionary" +
+		                  "\n 7 : Quit program");
+
+		while (true)
+		{
+			string userSelected = Console.ReadLine();
+
+			switch (userSelected)
+			{
+			case "1":
+				Console.WriteLine("Case 1");
+				PopulateDictionary();
+				break;
+			case "2":
+				Console.WriteLine("Case 2");
+				DisplayDictionary();
+				break;
+			case "3":
+				Console.WriteLine("Case 3");
+				RemoveKey();
+				break;
+			case "4":
+				Console.WriteLine("Case 4");
+				NewMovieReview();
+				break;
+			case "5":
+				Console.WriteLine("Case 5");
+				changeValue();
+				break;
+			case "6":
+				Console.WriteLine("Case 6");
+				SortMovies();
+				break;
+			case "7":
+				Console.WriteLine("Quitting...");
+				Environment.Exit(0);
+				break;
+			default:
+				Console.WriteLine("Please enter a value from 1-7");
+				break;
+			}
+		}
+	}
+
+	static void PopulateDictionary() // Case 1
+	{
+		// Adding elements
+		try
+		{
+			keyValuePairs.Add("Star Wars: A New Hope", 8.6f);
+			keyValuePairs.Add("Star Wars: The Empire Strikes Back", 8.7f);
+			keyValuePairs.Add("Indiana Jones and the Raiders of the Lost Ark", 8.4f);
+			keyValuePairs.Add("Indiana Jones and the Last Crusade", 8.2f);
+			keyValuePairs.Add("The Godfather", 9.2f);
+			keyValuePairs.Add("Back to the Future", 8.5f);
+			keyValuePairs.Add("Jurassic Park", 8.1f);
+			keyValuePairs.Add("The Shining", 8.4f);
+			keyValuePairs.Add("Blade Runner", 8.1f);
+			keyValuePairs.Add("Alien", 8.5f);
+			keyValuePairs.Add("Pulp Fiction", 8.9f);
+			keyValuePairs.Add("The Shawshank Redemption", 9.3f);
+		}
+		catch (ArgumentException)
+		{
+			Console.WriteLine("ERROR: You have already populated the dictionary with this data.");
+		}
+
+	}
+
+	static void DisplayDictionary() // Case 2
+	{
+		foreach (var ele in keyValuePairs)
+		{
+			Console.WriteLine($"\nMovie: {ele.Key}" +
+			                  $"\nRating: {ele.Value} out of 10");
+		}
+	}
+
+	static void RemoveKey()  //Case 3
+	{
+		// Removes key
+		try
+		{
+			// Prompts the user for the movie they would like to remove
+			Console.Write("Please enter the name of the movie you would like to remove:");
+			String removeMovie = Console.ReadLine();
+
+			// Check if a movie name was entered
+			if(string.IsNullOrWhiteSpace(removeMovie))
+			{
+				throw new Exception("No name was entered");
+			}
+
+			// Creates boolan value to check if the movie entered was in the dictionary and if it was removed.
+			bool canBeRemoved = keyValuePairs.Remove(removeMovie);
+			if(!canBeRemoved)
+			{
+				Console.Write("That movie is not in the dictionary");
+			}
+			else
+			{
+				Console.Write("Movie removed successfully");
+			}
+		}
+		catch(Exception a)
+		{
+			Console.Write(a.Message);
+		}
+		catch(Exception a)
+		{
+			Console.Write("An unexpected error has occured: " + a);
+		}
+
+	}
+
+	static void NewMovieReview() // Case 4
+	{
+		// Adds new movie review
+		try
+		{
+			// Prompts the user for the movie and rating they'd like to enter
+			Console.Write("Please type the name of the movie you would like to add: ");
+			String newMovie = Console.ReadLine();
+			Console.Write("Please type the corresponding rating on a scale of 0-10 to give the movie: ");
+			float newRating = float.Parse(Console.ReadLine());
+
+			// Checks if rating is within acceptable values
+			if (newRating > 10.0)
+			{
+				throw new ArgumentOutOfRangeException("Rating cannot be greater than 10");
+			}
+			if (newRating < 0.0)
+			{
+				throw new ArgumentOutOfRangeException("Rating cannot be less than 0");
+			}
+
+			keyValuePairs.Add(newMovie, newRating);
+		}
+		catch(ArgumentOutOfRangeException a)
+		{
+			// Exception thrown if rating is less than 0 or greater than 10
+			Console.WriteLine(a.Message);
+		}
+		catch (ArgumentException)
+		{
+			// Exception thrown if movie has already been reviewed
+			Console.WriteLine("The movie you entered has already been reviewed");
+		}
+		catch(Exception ex)
+		{
+			// Unexpected error
+			Console.WriteLine("An unexpected error has occured: " + ex);
+		}
+	}
+
+	static void changeValue() // Case 5
+	{
+		// Changes a value for a key
+		try
+		{
+			// Gets name of movie and checks if the movie is in the dictionary
+			Console.Write("Please enter the name of the movie you would like to change the rating of:");
+			String movieChange = Console.ReadLine();
+			if(keyValuePairs.ContainsKey(movieChange))
+			{
+				// Gets the new rating for that movie and checks if the rating is valid
+				Console.Write("Please enter the rating you would like to give the movie " + movieChange + ":");
+				float updatedRating = float.Parse(Console.ReadLine());
+
+				// Checks if the rating is valid
+				if(updatedRating > 10.0)
+				{
+					throw new ArgumentOutOfRangeException("Rating cannot be greater than 10");
+				}
+				if(updatedRating < 0.0)
+				{
+					throw new ArgumentOutOfRangeException("Rating cannot be less than 0");
+				}
+
+				// Updates the rating
+				keyValuePairs[movieChange] = updatedRating;
+			}
+			else
+			{
+				Console.Write("Movie could not be found");
+			}
+		}
+		catch(ArgumentOutOfRangeException a)
+		{
+			// Exception thrown if rating is less than 0 or greater than 10
+			Console.WriteLine(a.Message);
+		}
+		catch(Exception a)
+		{
+			Console.WriteLine("An unexpected error has occured " + a);
+		}
+	}
+
+	static void SortMovies() // Case 6
+	{
+		// Sorts movies from A-Z and their corresponding ratings
+		try
+		{
+			Dictionary<string, float> orderedMovies = new Dictionary<string, float> {};
+			foreach (var key in keyValuePairs.Keys.OrderBy(k => k))
+			orderedMovies.Add(key, keyValuePairs [key]);
+			keyValuePairs = orderedMovies;
+		}
+		catch(ArgumentException ex)
+		{
+			Console.WriteLine("An unexpected error has occured: " + ex);
+		}
+	}
+
+
+
+}
